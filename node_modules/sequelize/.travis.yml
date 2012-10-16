@@ -1,0 +1,20 @@
+before_script:
+  - "mysql -e 'create database sequelize_test;'"
+  - "psql -c 'create database sequelize_test;' -U postgres"
+
+script:
+  - "npm test"
+
+notifications:
+  email:
+    - sascha@depold.com
+
+env:
+  - DB=mysql
+
+language: node_js
+
+node_js:
+  - 0.6
+  - 0.8
+

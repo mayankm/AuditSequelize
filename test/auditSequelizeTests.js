@@ -1,5 +1,5 @@
 var should = require ('should');
-var AuditSequelize = require("./../model/entity_models/auditSequelize");
+var AuditSequelize = require("../lib/audit_sequelize");
 var Sequelize = require("sequelize");
 
 

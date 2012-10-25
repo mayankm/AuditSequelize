@@ -20,7 +20,7 @@ emitter.on("success_db", function(action,value,tableName){
 		eventTypeActionResponse:JSON.stringify(value),
 		timestamp:value.updatedAt
 	}).save().success(function(){
-		console.log("Record Created");
+		ccd ..onsole.log("Record Created");
 	}).error(function(err){
 		console.log(JSON.stringify(err));
 	});

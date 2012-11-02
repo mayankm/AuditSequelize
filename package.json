@@ -2,7 +2,6 @@
   "name": "auditSequelize",
   "version": "0.0.1",
   "description": "Wrapper around sequelize(a open source ORM for node.js) to audit each insert, update, delete operation",
-  "private": true,
   "author": "Mayank Mittal <mayank@flipkart.com>",
   "dependencies": {
     "sequelize": "1.5.0",

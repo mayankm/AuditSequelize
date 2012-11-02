@@ -1,5 +1,5 @@
 {
-  "name": "auditSequelize",
+  "name": "audit_sequelize",
   "version": "0.0.1",
   "description": "Wrapper around sequelize(a open source ORM for node.js) to audit each insert, update, delete operation",
   "author": "Mayank Mittal <mayank@flipkart.com>",

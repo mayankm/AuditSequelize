@@ -1,14 +1,28 @@
 {
-    "name": "auditSequelize",
-    "version": "0.0.1",
-    "description":"Wrapper around sequelize(a open source ORM for node.js) to audit each insert, update, delete operation",
-    "private": true,
-    "author": {
-        "name": "Mayank Mittal",
-        "email": "mayank@flipkart.com"
-    },
-    "dependencies": {
-        "sequelize": "1.5.0",
-        "underscore": "*"
-    }
+  "name": "auditSequelize",
+  "version": "0.0.1",
+  "description": "Wrapper around sequelize(a open source ORM for node.js) to audit each insert, update, delete operation",
+  "author": "Mayank Mittal <mayank@flipkart.com>",
+  "dependencies": {
+    "sequelize": "1.5.0",
+    "underscore": "*"
+  },
+  "main": "lib/audit_sequelize.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mayankm/AuditSequelize.git"
+  },
+  "keywords": [
+    "audit",
+    "sequelize",
+    "sequelizeWrapper"
+  ],
+  "license": "BSD"
 }

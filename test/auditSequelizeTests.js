@@ -2,11 +2,14 @@ var should = require ('should');
 var AuditSequelize = require("../lib/audit_sequelize");
 var Sequelize = require("sequelize");
 
-
+//./node_modules/mocha/bin/_mocha  /Users/mayank/sellerPlatform/auditSequelize/test/auditSequelizeTests.js  --reporter list --globals hasCert --ignore-leaks
 describe('Testing sequlize auditing', function(){
+    emitter = {}
+    emitter.emit = function(){
 
+    }
     before(function(done){
-        audSeq = new AuditSequelize('test_db', 'root', '', {logging: false},'audit_test_db', 'root', '', {logging: false});
+        audSeq = new AuditSequelize('test_db', 'root', '', {logging:false},'audit_test_db', 'root', '', {logging: false});
         MySeller  = audSeq.define('MySeller', {
             name: Sequelize.STRING,
             address: Sequelize.TEXT
@@ -23,6 +26,7 @@ describe('Testing sequlize auditing', function(){
 
     it('should return error if audit table is not created while sync', function(done){
 
+        console.log("here");
         audSeq.sync().success(function(){
             MySeller.auditDaoFactory.create().success(function(){
                 done();
@@ -59,6 +63,40 @@ describe('Testing sequlize auditing', function(){
         });
 
     })
+
+    it('should return error if audit entry is not created for a updateAttribute operation', function(done){
+            audSeq.sync().success(function(){
+                MySeller.create({name:"myFirstName"}).success(function(mySeller){
+                    var id = mySeller.sequelizeDao["id"];
+                    var newName = "mySecondName";
+    //                mySeller["name"] = newName;
+                    mySeller.updateAttributes({name:newName}).success(function(myNewSeller){
+                        MySeller.auditDaoFactory.create().success(function(){
+                            MySeller.auditDaoFactory.findAll({where:"audit_id = "+id}).success(function(auditDaos){
+                                if(auditDaos.length === 2){
+                                    var whereString = "audit_id = "+id + " AND audit_name = '" + newName + "'";
+                                    MySeller.auditDaoFactory.find({where:whereString}).success(function(auditDao){
+                                        auditDao["audit_name"].should.equal(newName);
+                                        done();
+                                    });
+
+                                }else{
+                                    "updation entry not found in audit db".should.equal(false);
+                                }
+
+                            })
+
+                        })
+                    });
+                }).error(function(err){
+                        true.should.equal(false);
+                    })
+
+
+            });
+
+        })
+
 
     it('should return error if audit entry is not created for a update operation', function(done){
         audSeq.sync().success(function(){

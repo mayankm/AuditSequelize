@@ -26,7 +26,6 @@ describe('Testing sequlize auditing', function(){
 
     it('should return error if audit table is not created while sync', function(done){
 
-        console.log("here");
         audSeq.sync().success(function(){
             MySeller.auditDaoFactory.create().success(function(){
                 done();

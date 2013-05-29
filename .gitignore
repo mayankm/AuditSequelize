@@ -1,2 +1,8 @@
 .DS_Store
 .idea
+.coverage_data/
+node_modules/mocha/
+cover_html/
+coverage/
+node_modules/.bin
+node_modules/cover/

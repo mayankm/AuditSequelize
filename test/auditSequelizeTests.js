@@ -20,6 +20,8 @@ MyPan  = audSeq.define('MyPan', {
 
 
 //./node_modules/mocha/bin/_mocha  /Users/mayank/sellerPlatform/auditSequelize/test/auditSequelizeTests.js  --reporter list --globals hasCert --ignore-leaks
+
+
 describe('Testing sequelize auditing', function(){
 
     before(function(done){
@@ -445,7 +447,18 @@ describe('Testing sequelize auditing', function(){
                                         if(resultSet.length != 1){
                                             "Entry created for relationship ".should.equal(true);
                                         }
-                                        done();
+                                        mySeller.getMyPans().success(function(pans){
+//                                            console.log(pans);
+                                            if(!pans || pans.length == 0){
+                                                "Pans should not be null".should.equal(true);
+                                            }
+                                            done();
+                                        }).error(function(err){
+                                                if(err){
+                                                    "Error while getting the pans for a seller".should.equal(false);
+                                                }
+                                                done();
+                                            })
                                     })
                                 })
                             });
@@ -730,7 +743,7 @@ describe('Testing if audit db does not exists', function(){
             name: Sequelize.STRING,
             address: Sequelize.TEXT
         });
-        noAudSeqDb.sync(); //TO test the concurrency and call without success or error
+//        noAudSeqDb.sync(); //TO test the concurrency and call without success or error
         noAudSeqDb.sync().success(function(){
             "No sync operation should succeed without audit db".should.equal(true);
             done();
@@ -741,24 +754,17 @@ describe('Testing if audit db does not exists', function(){
                 done();
             });
 
-        //add the code to cleanup the db
     })
 
     it('should not return error on insertion if no audit db', function(done){
 
-        NoSeller  = noAudSeqDb.define('NoSeller', {
-            name: Sequelize.STRING,
-            address: Sequelize.TEXT
-        });
-        NoSeller.create().success(function(){
-            "No success cshould be called if no table exists".should.equal(true);
+        MySellerWithoutADb.create().success(function(){
             done();
         }).error(function(error){
-                if(error == null){
-                    "Error should not be null".should.equal(true);
+                if(error != null){
+                    "Error should be null".should.equal(true);
                 }
                 done();
-
             });
     })
 });

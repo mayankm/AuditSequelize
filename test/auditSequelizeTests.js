@@ -65,9 +65,41 @@ describe('Testing sequelize auditing', function(){
 
     })
 
+    it('should return error if selected attribute is not found', function(done){
+        audSeq.sync().success(function(){
+            var name = "my_name";
+            var address = "myAddress";
+            MySeller.create({name:name, address:address}).success(function(mySeller){
+                var id = mySeller.sequelizeDao["id"];
+                MySeller.auditDaoFactory.create().success(function(){
+                    MySeller.find({where:"id = "+id
+                        ,attributes:[['CONCAT_WS(",",name,address)', 'concatenated_name_address']]
+                    }).success(function(seller){
+                        if(seller){
+                            seller.concatenated_name_address.should.equal(name+","+address);
+                            done();
+                        }else{
+                            "created id not found in db".should.equal(false);
+                        }
+
+                    })
+
+                })
+
+            }).error(function(err){
+                    true.should.equal(false);
+                })
+
+
+        });
+
+    })
+
+
+
     it('should return error if created entry is not found', function(done){
         audSeq.sync().success(function(){
-            MySeller.create().success(function(mySeller){
+            MySeller.create({name:"my_name"}).success(function(mySeller){
                 var id = mySeller.sequelizeDao["id"];
                 MySeller.auditDaoFactory.create().success(function(){
                     MySeller.find({where:"id = "+id}).success(function(seller){

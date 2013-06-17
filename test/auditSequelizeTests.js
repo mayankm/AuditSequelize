@@ -7,7 +7,14 @@ emitter.emit = function(){
 
 }
 
-audSeq = new AuditSequelize('test_db', 'root', '', {logging:false},'audit_test_db', 'root', '', {logging: false, "timeNotificationCallBack": function(){}});
+audSeq = new AuditSequelize(null, null, '', {
+        replication:{read: [
+            { host: 'localhost', username: 'root', password: null, database: "test_db" }
+        ],
+        write: { host: 'localhost', username: 'root', password: null, database: "test_db"  }},
+        logging:false
+    },
+    'audit_test_db', 'root', '', {logging: false, "timeNotificationCallBack": function(){}});
 MySeller  = audSeq.define('MySeller', {
     name: Sequelize.STRING,
     address: Sequelize.TEXT
@@ -75,14 +82,14 @@ describe('Testing sequelize auditing', function(){
                     MySeller.find({where:"id = "+id
                         ,attributes:[['CONCAT_WS(",",name,address)', 'concatenated_name_address']]
                     }).success(function(seller){
-                        if(seller){
-                            seller.concatenated_name_address.should.equal(name+","+address);
-                            done();
-                        }else{
-                            "created id not found in db".should.equal(false);
-                        }
+                            if(seller){
+                                seller.concatenated_name_address.should.equal(name+","+address);
+                                done();
+                            }else{
+                                "created id not found in db".should.equal(false);
+                            }
 
-                    })
+                        })
 
                 })
 
